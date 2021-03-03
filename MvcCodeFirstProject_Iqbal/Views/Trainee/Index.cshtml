@@ -1,0 +1,79 @@
+﻿@model PagedList.IPagedList<MvcCodeFirstProject_Iqbal.Models.Trainee>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div>
+    @using (Html.BeginForm())
+    {
+        <p>
+            Find By Trainee Name: @Html.TextBox("searchString")
+            <input type="submit" value="Search" />
+        </p>
+    }
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.ActionLink("TraineeName", "Index", new { sortOrder = ViewBag.NameSortParam })
+            </th>
+            <th>Email</th>
+            <th>Cell Phone</th>
+            <th>Address</th>
+            <th>TraineeFee</th>
+            <th>Admission Date</th>
+            <th>Image</th>
+            <th>Teacher Name</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TraineeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmailAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CellPhone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContactAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TraineeFee)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AdmisionDate)
+        </td>
+        <td>
+            <img src="@Url.Content(item.UploadImage)" height="80" width="80" />
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Teacher.TeacherName)
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id = item.TraineeID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.TraineeID })
+        </td>
+    </tr>
+        }
+
+    </table>
+
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+   new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }
+   ));
+</div>
